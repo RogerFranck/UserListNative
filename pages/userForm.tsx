@@ -10,13 +10,13 @@ import useForm from '../hooks/useForm';
 import usePutData from '../hooks/usePutData';
 import usePostData from '../hooks/usePostData';
 
-export default function UserEdit({ route }: any) {
+export default function UserForm({ route, navigation }: any) {
   const { id, name, email, phone, isEdit } = route.params;
   const { state, handleChangueForm } = useForm({
     initialState: { id, name, email, phone }
   });
-  const { putUser } = usePutData()
-  const { postUser } = usePostData()
+  const { putUser } = usePutData(navigation);
+  const { postUser } = usePostData(navigation);
 
   return (
     <View style={styles.root}>
@@ -30,17 +30,22 @@ export default function UserEdit({ route }: any) {
         <TextInput
           style={styles.input}
           value={state.email}
-          onChangeText={(value) => handleChangueForm('name', value)}
+          onChangeText={(value) => handleChangueForm('email', value)}
           placeholder="Email"
         />
         <TextInput
           style={styles.input}
           value={state.phone}
-          onChangeText={(value) => handleChangueForm('name', value)}
+          onChangeText={(value) => handleChangueForm('phone', value)}
           placeholder="Telefono"
         />
-        <TouchableOpacity style={styles.button} onPress={() => isEdit ? putUser(state.id, state) : postUser(state) }>
-          <Text style={styles.buttonText}>Guardar</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => (isEdit ? putUser(state.id, state) : postUser(state))}
+        >
+          <Text style={styles.buttonText}>
+            {isEdit ? 'Actualizar' : 'Guardar'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

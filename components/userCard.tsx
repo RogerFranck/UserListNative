@@ -2,12 +2,16 @@ import * as React from 'react';
 import { Card, IconButton, Paragraph } from 'react-native-paper';
 import { UserCardProps } from '../interfaces/userCardProps';
 import { StyleSheet } from 'react-native';
+import useDeleteData from '../hooks/useDeleteData';
 
 interface Props extends UserCardProps {
   navigation: any;
+  getData: Function;
 }
 
-const UserCard = ({ name, email, phone, navigation }: Props) => {
+const UserCard = ({ id, name, email, phone, navigation, getData }: Props) => {
+  const isEdit = true;
+  const { deleteUser } = useDeleteData(getData);
   return (
     <Card style={styles.card}>
       <Card.Title title={name} />
@@ -18,8 +22,17 @@ const UserCard = ({ name, email, phone, navigation }: Props) => {
       <Card.Actions style={styles.actions}>
         <IconButton
           icon="pencil"
-          onPress={() => navigation.navigate('Editar', { name, email, phone })}
+          onPress={() =>
+            navigation.navigate('Form', {
+              id,
+              name,
+              email,
+              phone,
+              isEdit
+            })
+          }
         />
+        <IconButton icon="delete" onPress={() => deleteUser(id)} />
       </Card.Actions>
     </Card>
   );
