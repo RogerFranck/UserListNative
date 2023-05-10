@@ -7,12 +7,17 @@ import {
   TouchableOpacity
 } from 'react-native';
 import useForm from '../hooks/useForm';
+import usePutData from '../hooks/usePutData';
+import usePostData from '../hooks/usePostData';
 
 export default function UserEdit({ route }: any) {
-  const { name, email, phone } = route.params;
+  const { id, name, email, phone, isEdit } = route.params;
   const { state, handleChangueForm } = useForm({
-    initialState: { name, email, phone }
+    initialState: { id, name, email, phone }
   });
+  const { putUser } = usePutData()
+  const { postUser } = usePostData()
+
   return (
     <View style={styles.root}>
       <View style={styles.container}>
@@ -34,7 +39,7 @@ export default function UserEdit({ route }: any) {
           onChangeText={(value) => handleChangueForm('name', value)}
           placeholder="Telefono"
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => isEdit ? putUser(state.id, state) : postUser(state) }>
           <Text style={styles.buttonText}>Guardar</Text>
         </TouchableOpacity>
       </View>
